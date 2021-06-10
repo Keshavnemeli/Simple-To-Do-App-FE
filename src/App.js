@@ -1,24 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import { useContext, useEffect } from "react";
+import { Switch, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import AuthContext from "./store/auth-context";
+import "./App.css";
+import { authenticate } from "./store/auth-actions";
+import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
 
 function App() {
+  const { state, dispatch } = useContext(AuthContext);
+
+  useEffect(() => {
+    console.log("mounted");
+    if (localStorage.getItem("token")) {
+      authenticate(dispatch);
+    }
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Switch>
+      <Route path="/" exact>
+        <HomePage />
+      </Route>
+      <PublicRoute
+        isAuthenticated={state.token}
+        component={LoginPage}
+        path="/login"
+        exact
+      />
+      <PublicRoute
+        isAuthenticated={state.token}
+        component={SignupPage}
+        path="/signup"
+        exact
+      />
+    </Switch>
   );
 }
 
