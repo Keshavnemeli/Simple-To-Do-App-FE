@@ -6,7 +6,6 @@ const initialState = {
   token: localStorage.getItem("token") || "",
   loader: false,
   error: {},
-  success: "",
 };
 
 const AuthContext = React.createContext(initialState);

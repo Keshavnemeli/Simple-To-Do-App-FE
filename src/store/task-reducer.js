@@ -1,16 +1,15 @@
-const authReducer = (state, action) => {
+const taskReducer = (state, action) => {
   switch (action.type) {
-    case "LOGIN":
+    case "SET_TASKS":
       return {
         ...state,
-        token: action.payload.token,
-        user: action.payload.user,
+        taskList: action.payload ? action.payload : [],
+        totalCount: action.payload?.length,
       };
-    case "LOGOUT":
+    case "SET_IS_UPDATED":
       return {
         ...state,
-        token: "",
-        user: null,
+        isUpdated: { updated: action.payload },
       };
     case "SET_LOADER":
       return {
@@ -29,4 +28,4 @@ const authReducer = (state, action) => {
   }
 };
 
-export default authReducer;
+export default taskReducer;

@@ -8,12 +8,17 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useHistory } from "react-router";
 import AuthContext from "../../store/auth-context";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { Link } from "react-router-dom";
-import { login, sendAuthRequest, setError } from "../../store/auth-actions";
+import {
+  login,
+  sendAuthRequest,
+  setError,
+  setLoader,
+} from "../../store/auth-actions";
 import Loader from "../UI/Loader";
 import useStyles from "./SignupFormStyles";
 
@@ -24,6 +29,13 @@ const SignupForm = () => {
   const { state, dispatch } = useContext(AuthContext);
   const history = useHistory();
   const classes = useStyles();
+
+  useEffect(() => {
+    return () => {
+      dispatch(setLoader(false));
+      dispatch(setError(null));
+    };
+  }, [dispatch]);
 
   const formSubmitHandler = async (event) => {
     event.preventDefault();
@@ -100,8 +112,8 @@ const SignupForm = () => {
                 name="email"
                 autoComplete="email"
                 inputRef={emailRef}
-                helperText={state.error.email}
-                error={state.error.email ? true : false}
+                helperText={state.error?.email}
+                error={state.error?.email ? true : false}
               />
             </Grid>
             <Grid item xs={12}>
@@ -115,8 +127,8 @@ const SignupForm = () => {
                 id="password"
                 autoComplete="current-password"
                 inputRef={passwordRef}
-                helperText={state.error.password}
-                error={state.error.password ? true : false}
+                helperText={state.error?.password}
+                error={state.error?.password ? true : false}
               />
             </Grid>
           </Grid>

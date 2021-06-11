@@ -1,7 +1,12 @@
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import AuthContext from "../../store/auth-context";
 import { useHistory } from "react-router";
-import { sendAuthRequest, login, setError } from "../../store/auth-actions";
+import {
+  sendAuthRequest,
+  login,
+  setError,
+  setLoader,
+} from "../../store/auth-actions";
 import {
   Avatar,
   Button,
@@ -24,10 +29,17 @@ const LoginForm = () => {
   const history = useHistory();
   const classes = useStyles();
 
+  useEffect(() => {
+    return () => {
+      dispatch(setLoader(false));
+      dispatch(setError(null));
+    };
+  }, [dispatch]);
+
   const formSubmitHandler = async (event) => {
     event.preventDefault();
 
-    dispatch(setError(""));
+    dispatch(setError(null));
     if (!emailRef.current.value.includes("@")) {
       dispatch(
         setError({
@@ -66,7 +78,9 @@ const LoginForm = () => {
   console.log(state.error);
   return (
     <>
-      {state.error.error && <Alert severity="error">{state.error.error}</Alert>}
+      {state.error?.error && (
+        <Alert severity="error">{state.error.error}</Alert>
+      )}
       <Container className={classes.container} component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -88,8 +102,8 @@ const LoginForm = () => {
               autoComplete="email"
               autoFocus
               inputRef={emailRef}
-              helperText={state.error.email}
-              error={state.error.email ? true : false}
+              helperText={state.error?.email}
+              error={state.error?.email ? true : false}
             />
             <TextField
               variant="outlined"
@@ -102,9 +116,8 @@ const LoginForm = () => {
               id="password"
               autoComplete="current-password"
               inputRef={passwordRef}
-              helperText={state.error.password}
-              error={state.error.password ? true : false}
-              gutterBottom
+              helperText={state.error?.password}
+              error={state.error?.password ? true : false}
             />
             {state.loader ? (
               <>

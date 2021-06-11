@@ -10,14 +10,17 @@ import { Link } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import useStyles from "./HomePageContentStyles";
 import Loader from "../UI/Loader";
+import Alert from "@material-ui/lab/Alert";
 
 const HomePageContent = () => {
   const { state } = useContext(AuthContext);
   const classes = useStyles();
 
-  console.log(state.token);
   return (
-    <div>
+    <>
+      {state.error?.error && (
+        <Alert severity="error">{state.error.error}</Alert>
+      )}
       <CssBaseline />
       <main>
         <div className={classes.container}>
@@ -46,7 +49,7 @@ const HomePageContent = () => {
               <div>
                 <Grid container justify="center">
                   <Grid item>
-                    <Link to="/taskApp">
+                    <Link to="/tasks">
                       <Button variant="contained" color="primary">
                         go to Task App
                       </Button>
@@ -77,7 +80,7 @@ const HomePageContent = () => {
           </Container>
         </div>
       </main>
-    </div>
+    </>
   );
 };
 

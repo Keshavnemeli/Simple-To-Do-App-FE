@@ -8,6 +8,7 @@ import "./App.css";
 import { authenticate } from "./store/auth-actions";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
+import TaskPage from "./pages/TaskPage";
 
 function App() {
   const { state, dispatch } = useContext(AuthContext);
@@ -34,6 +35,12 @@ function App() {
         isAuthenticated={state.token}
         component={SignupPage}
         path="/signup"
+        exact
+      />
+      <ProtectedRoute
+        isAuthenticated={state.token}
+        component={TaskPage}
+        path="/tasks"
         exact
       />
     </Switch>

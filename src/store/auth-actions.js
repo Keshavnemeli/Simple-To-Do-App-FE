@@ -6,6 +6,7 @@ export const login = (payload) => {
 };
 
 export const logout = (payload) => {
+  localStorage.removeItem("token");
   return {
     type: "LOGOUT",
   };
@@ -55,6 +56,10 @@ export const sendAuthRequest = async (
     return responseJson;
   } catch (error) {
     dispatch(setLoader(false));
+    if (error.message === "Failed to fetch") {
+      dispatch(setError({ error: "Server Down" }));
+      return;
+    }
     dispatch(setError({ error: error.message }));
   }
 };
@@ -84,7 +89,11 @@ export const authenticate = async (dispatch) => {
     );
   } catch (error) {
     dispatch(setLoader(false));
-    dispatch(setError({ error: error.message }));
+    console.log(error.message);
+    if (error.message === "Failed to fetch") {
+      dispatch(setError({ error: "Server Down" }));
+      return;
+    }
     dispatch(logout());
   }
 };
