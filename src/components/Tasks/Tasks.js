@@ -15,7 +15,13 @@ import {
 import Alert from "@material-ui/lab/Alert";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../store/auth-context";
-import { fetchTasks, setError, setLoader } from "../../store/task-actions";
+import {
+  fetchTasks,
+  setError,
+  setLoader,
+  setSearchDispatch,
+  setCompleted,
+} from "../../store/task-actions";
 import TaskContext from "../../store/task-context";
 import Backdrop from "@material-ui/core/Backdrop";
 import { makeStyles } from "@material-ui/core";
@@ -52,12 +58,13 @@ const Tasks = () => {
   const { state: taskState, dispatch: taskDispatch } = useContext(TaskContext);
   const { state: authState } = useContext(AuthContext);
   const [openModal, setOpenModal] = useState(false);
+  const [search, setSearch] = useState("");
   const classes = useStyles();
 
   useEffect(() => {
     fetchTasks({
       dispatch: taskDispatch,
-      sort: taskState.sort,
+      completed: taskState.completed,
       search: taskState.search,
       page: taskState.page,
     });
@@ -69,14 +76,21 @@ const Tasks = () => {
     };
   }, [
     taskDispatch,
-    taskState.sort,
+    taskState.completed,
     taskState.search,
     taskState.page,
-    taskState.completed,
+    // taskState.limit,
     taskState.isUpdated,
   ]);
 
-  console.log(taskState.taskList);
+  useEffect(() => {
+    const timer = setTimeout(
+      () => taskDispatch(setSearchDispatch(search)),
+      500
+    );
+
+    return () => clearTimeout(timer);
+  }, [search, taskDispatch]);
 
   return (
     <div>
@@ -130,19 +144,26 @@ const Tasks = () => {
                 className={classes.ageSelect}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={"completed"}
-                // onChange={handleChange}
+                value={taskState.completed === null ? "" : taskState.completed}
+                onChange={(event) => {
+                  taskDispatch(
+                    setCompleted(
+                      event.target.value === "" ? null : event.target.value
+                    )
+                  );
+                }}
               >
-                <MenuItem value={"all"}>All</MenuItem>
-                <MenuItem value={"completed"}>Completed</MenuItem>
-                <MenuItem value={"InComplete"}>InComplete</MenuItem>
+                <MenuItem value={""}>All</MenuItem>
+                <MenuItem value={true}>Completed</MenuItem>
+                <MenuItem value={false}>InComplete</MenuItem>
               </Select>
               <TextField
                 id="searchTask"
                 label="Search"
-                // value={props.searchValue}
-                // onChange={(e) => {
-                //   searchTaskHandler(e); }}
+                // value={}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                }}
               />{" "}
             </FormControl>
 

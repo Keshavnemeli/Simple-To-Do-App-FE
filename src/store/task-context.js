@@ -3,12 +3,11 @@ import taskReducer from "./task-reducer";
 
 const initialState = {
   taskList: [],
-  totalCount: 0,
   isUpdated: {
     updated: true,
   },
   loader: false,
-  sort: "ascending",
+  completed: null,
   search: "",
   page: 1,
   error: {},

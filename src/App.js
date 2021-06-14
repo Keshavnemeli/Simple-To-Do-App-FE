@@ -9,41 +9,54 @@ import { authenticate } from "./store/auth-actions";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import TaskPage from "./pages/TaskPage";
+import ProfilePage from "./pages/ProfilePage";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const { state, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
-    console.log("mounted");
     if (localStorage.getItem("token")) {
       authenticate(dispatch);
     }
   }, [dispatch]);
 
   return (
-    <Switch>
-      <Route path="/" exact>
-        <HomePage />
-      </Route>
-      <PublicRoute
-        isAuthenticated={state.token}
-        component={LoginPage}
-        path="/login"
-        exact
-      />
-      <PublicRoute
-        isAuthenticated={state.token}
-        component={SignupPage}
-        path="/signup"
-        exact
-      />
-      <ProtectedRoute
-        isAuthenticated={state.token}
-        component={TaskPage}
-        path="/tasks"
-        exact
-      />
-    </Switch>
+    <>
+      {" "}
+      <Header />
+      <Switch>
+        <Route path="/" exact>
+          <HomePage />
+        </Route>
+        <PublicRoute
+          isAuthenticated={state.token}
+          component={LoginPage}
+          path="/login"
+          exact
+        />
+        <PublicRoute
+          isAuthenticated={state.token}
+          component={SignupPage}
+          path="/signup"
+          exact
+        />
+        <ProtectedRoute
+          isAuthenticated={state.token}
+          component={TaskPage}
+          path="/tasks"
+          exact
+        />
+        <ProtectedRoute
+          isAuthenticated={state.token}
+          component={ProfilePage}
+          path="/profile"
+          exact
+        />
+      </Switch>
+      <Footer />
+    </>
   );
 }
 

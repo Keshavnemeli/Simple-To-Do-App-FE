@@ -66,7 +66,6 @@ const TaskListItem = (props) => {
         <>
           <form
             className={classes.desriptionForm}
-            noValidate
             autoComplete="off"
           >
             <TextField

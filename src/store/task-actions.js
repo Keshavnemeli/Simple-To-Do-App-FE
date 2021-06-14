@@ -1,3 +1,4 @@
+import { baseUrl } from "../config/config";
 import getAuthHeaders from "../utils/utils";
 
 export const setTasks = (payload) => {
@@ -10,6 +11,20 @@ export const setTasks = (payload) => {
 export const setUpdate = (payload) => {
   return {
     type: "SET_IS_UPDATED",
+  };
+};
+
+export const setSearchDispatch = (payload) => {
+  return {
+    type: "SET_SEARCH",
+    payload: payload,
+  };
+};
+
+export const setCompleted = (payload) => {
+  return {
+    type: "SET_COMPLETED",
+    payload: payload,
   };
 };
 
@@ -33,8 +48,7 @@ const sendRequest = async ({
   data = null,
   headers = { "Content-Type": "application/json" },
 } = {}) => {
-  console.log(endpoint, headers, method);
-  const response = await fetch(`http://localhost:8080${endpoint}`, {
+  const response = await fetch(`${baseUrl}${endpoint}`, {
     method: method,
     body: data && JSON.stringify(data),
     headers: headers,
@@ -46,23 +60,21 @@ const sendRequest = async ({
       responseJson.error ? responseJson.error : "Authentication Failed"
     );
   }
-  console.log(responseJson);
   return responseJson;
 };
 
 export const fetchTasks = async ({
   dispatch,
-  sort = "ascending",
+  completed = null,
   search = "",
   page = 1,
   limit = 5,
 }) => {
   dispatch(setLoader(true));
 
-  const queryParams = `?sortBy=${
-    sort === "ascending" ? "" : "desc"
-  }&page=${page}&limit=${limit}${search && `&search=${search}`}`;
-
+  const queryParams = `?${completed !== null ? `completed=${completed}&` : ""}${
+    search && `search=${search}&`
+  }page=${page}&limit=${limit}`;
   const endpoint = "/tasks" + queryParams;
 
   try {

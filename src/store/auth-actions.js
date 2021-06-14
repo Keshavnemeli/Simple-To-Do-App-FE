@@ -1,3 +1,5 @@
+import { baseUrl } from "../config/config";
+
 export const login = (payload) => {
   return {
     type: "LOGIN",
@@ -9,6 +11,13 @@ export const logout = (payload) => {
   localStorage.removeItem("token");
   return {
     type: "LOGOUT",
+  };
+};
+
+export const updateUser = (payload) => {
+  return {
+    type: "UPDATE_USER",
+    payload: payload,
   };
 };
 
@@ -34,11 +43,14 @@ export const sendAuthRequest = async (
   data = null,
   headers = {
     "Content-Type": "application/json",
+    // "Access-Control-Allow-Origin": "*",
+    // crossorigin: true,
   }
 ) => {
   dispatch(setLoader(true));
   try {
-    const response = await fetch(`http://localhost:8080${endpoint}`, {
+    console.log(headers);
+    const response = await fetch(`${baseUrl}${endpoint}`, {
       method: method,
       body: JSON.stringify(data),
       headers: headers,
@@ -67,7 +79,7 @@ export const sendAuthRequest = async (
 export const authenticate = async (dispatch) => {
   dispatch(setLoader(true));
   try {
-    const response = await fetch("http://localhost:8080/users/me", {
+    const response = await fetch(`${baseUrl}/users/me`, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + window.localStorage.getItem("token"),

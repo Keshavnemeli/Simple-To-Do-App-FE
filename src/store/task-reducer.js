@@ -11,6 +11,16 @@ const taskReducer = (state, action) => {
         ...state,
         isUpdated: { updated: action.payload },
       };
+    case "SET_COMPLETED":
+      return {
+        ...state,
+        completed: action.payload,
+      };
+    case "SET_SEARCH":
+      return {
+        ...state,
+        search: action.payload,
+      };
     case "SET_LOADER":
       return {
         ...state,

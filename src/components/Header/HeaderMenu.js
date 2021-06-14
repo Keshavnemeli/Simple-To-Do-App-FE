@@ -9,6 +9,7 @@ import {
   Popper,
 } from "@material-ui/core";
 import { useContext, useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router";
 import { logout } from "../../store/auth-actions";
 import AuthContext from "../../store/auth-context";
 
@@ -23,6 +24,7 @@ const HeaderMenu = (props) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const { dispatch } = useContext(AuthContext);
+  const history = useHistory();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -61,6 +63,7 @@ const HeaderMenu = (props) => {
           aria-describedby={open ? "menu-list-grow" : undefined}
           aria-haspopup="true"
           onClick={handleToggle}
+          variant="rounded"
         >
           {props.letter}
         </Avatar>
@@ -87,7 +90,13 @@ const HeaderMenu = (props) => {
                     id="menu-list-grow"
                     onKeyDown={handleListKeyDown}
                   >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        history.push("/profile");
+                      }}
+                    >
+                      Profile
+                    </MenuItem>
                     <MenuItem
                       onClick={() => {
                         dispatch(logout());
