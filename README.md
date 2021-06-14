@@ -1,3 +1,7 @@
+# Info: 
+This is the front end for a practice project. This is a simple-to-do-list app with authentication and routing. You can access the deployed application on https://quickstart-1563965562468.web.app/
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
